@@ -1,5 +1,11 @@
 <template>
-  <div class="modal fade" id="driverModal" tabindex="-1" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="driverModal"
+    tabindex="-1"
+    aria-hidden="true"
+    data-bs-backdrop="false"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
