@@ -94,8 +94,8 @@
                   class="dropdown-item"
                   href="#"
                   data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  @click.prevent="openModalForEdit(user)"
+                  data-bs-target="#driverModal"
+                  @click.prevent="openEditModal(user)"
                   >Edit</a
                 >
               </li>
