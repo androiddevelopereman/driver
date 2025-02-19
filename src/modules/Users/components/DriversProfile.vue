@@ -177,23 +177,9 @@ function exportData(format) {
   alert(`Export data as ${format}`);
 }
 
-const authData = {
-  authorization: {
-    token:
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4xMDAuMjI6ODA5MS9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTczOTkxNTIzNiwiZXhwIjoxNzM5OTQ0MDM2LCJuYmYiOjE3Mzk5MTUyMzYsImp0aSI6IlY0U0U2cG1qbER0WE5JdEUiLCJzdWIiOiIzNjkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6RozPvHioVuRfzGv62I4sE_wV7j97EvRTa_2OUAQJvE",
-  },
-  user: {
-    accounts: [
-      {
-        id: 302,
-        language: "english",
-      },
-    ],
-  },
-};
-
-async function fetchDrivers(authData) {
+async function fetchDrivers() {
   try {
+    const authData = JSON.parse(localStorage.getItem("userData"));
     const token = authData.authorization.token;
     const selectedAccount = authData.user.accounts[0]?.id;
     const selectedLanguage = authData.user.accounts[0]?.language || "english";
@@ -218,7 +204,7 @@ async function fetchDrivers(authData) {
 
 onMounted(async () => {
   console.log("mounted");
-  await fetchDrivers(authData);
+  await fetchDrivers();
 });
 </script>
 

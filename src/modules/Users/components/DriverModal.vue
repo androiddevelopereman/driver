@@ -199,7 +199,6 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 
-const store = useStore();
 const props = defineProps({
   mode: {
     type: String,
@@ -262,16 +261,18 @@ async function handleSubmit() {
     };
 
     const userDataJson = localStorage.getItem("userData");
-    const userData = ref(JSON.parse(userDataJson));
+    const authData = JSON.parse(userDataJson);
 
-    const selectedAccount = userData.user.accounts[0]?.id;
-    const selectedLanguage = userData.user.accounts[0]?.language;
+    const selectedAccount = authData.user.accounts[0]?.id;
+    const selectedLanguage = authData.user.accounts[0]?.language;
+    const token = authData.authorization.token;
 
     const response = await axios({
       method: props.mode === "add" ? "post" : "put",
       url: "http://192.168.100.22:8091/api/drivers",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
         "Selected-Account": selectedAccount,
         "Selected-Language": selectedLanguage,
       },
