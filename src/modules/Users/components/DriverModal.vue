@@ -275,6 +275,7 @@ async function handleSubmit() {
         Authorization: `Bearer ${token}`,
         "Selected-Account": selectedAccount,
         "Selected-Language": selectedLanguage,
+        Accept: "application/json",
       },
       data: formattedData,
     });
