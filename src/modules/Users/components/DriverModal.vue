@@ -197,7 +197,9 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import axios from "axios";
 
+const store = useStore();
 const props = defineProps({
   mode: {
     type: String,
@@ -225,12 +227,68 @@ const props = defineProps({
 const emit = defineEmits(["submit"]);
 const userData = ref({ ...props.user });
 
-function handleSubmit() {
-  emit("submit", userData.value);
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("driverModal")
-  );
-  modal.hide();
+async function handleSubmit() {
+  try {
+    const formattedData = {
+      name: userData.value.name,
+      mobile: userData.value.mobile,
+      phone: userData.value.phone,
+      type: "driver",
+      email: userData.value.email,
+      mobile_prefix: "970",
+      license_number: userData.value.licenseNumber,
+      license_expiry_at: userData.value.licenseExpiry,
+      iButton: [],
+      tags: [],
+      license_type: userData.value.licenseType,
+      jawwal_requirements: false,
+      license_issue_at: userData.value.licenseIssue,
+      license_card_image: [],
+      work_city_id: "",
+      home_city_id: "",
+      work_address: userData.value.workAddress,
+      home_address: userData.value.homeAddress,
+      job_number: "",
+      id_number: "",
+      birth_date: userData.value.birthDate,
+      emergency_contact_number: "",
+      zones: [],
+      age: "",
+      driver_image: null,
+      attachment: [],
+      send_email: false,
+      send_mobile: false,
+      position: userData.value.position,
+    };
+
+    const userDataJson = localStorage.getItem("userData");
+    const userData = ref(JSON.parse(userDataJson));
+
+    const selectedAccount = userData.user.accounts[0]?.id;
+    const selectedLanguage = userData.user.accounts[0]?.language;
+
+    const response = await axios({
+      method: props.mode === "add" ? "post" : "put",
+      url: "http://192.168.100.22:8091/api/drivers",
+      headers: {
+        "Content-Type": "application/json",
+        "Selected-Account": selectedAccount,
+        "Selected-Language": selectedLanguage,
+      },
+      data: formattedData,
+    });
+
+    if (response.status === 200 || response.status === 201) {
+      emit("submit", response.data);
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById("driverModal")
+      );
+      modal.hide();
+    }
+  } catch (error) {
+    console.error("Error submitting driver data:", error);
+    // Handle error (show toast notification, etc.)
+  }
 }
 
 function resetForm() {
