@@ -159,8 +159,25 @@ const openDeleteModal = (driver) => {
   selectedUser.value = { ...driver };
   modalMode.value = "delete";
 };
-const deleteDriver = () => {
+const deleteDriver = async () => {
   console.log("delete", selectedUser.value);
+
+  // call api to delete driver
+  const authData = JSON.parse(localStorage.getItem("userData"));
+  const token = authData.authorization.token;
+  const selectedAccount = authData.user.accounts[0]?.id;
+  const selectedLanguage = authData.user.accounts[0]?.language || "english";
+
+  const response = await axios.delete(
+    `http://192.168.100.22:8091/api/drivers/${selectedUser.value.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Selected-Account": selectedAccount,
+        "Selected-Language": selectedLanguage,
+      },
+    }
+  );
 };
 
 const handleUserSubmit = (userData) => {
