@@ -95,7 +95,7 @@
                   href="#"
                   data-bs-toggle="modal"
                   data-bs-target="#driverModal"
-                  @click.prevent="openEditModal(user)"
+                  @click.prevent="openEditModal(driver)"
                   >Edit</a
                 >
               </li>
@@ -103,7 +103,14 @@
                 <a class="dropdown-item">Details</a>
               </li>
               <li>
-                <a class="dropdown-item">Delete</a>
+                <a
+                  class="dropdown-item"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteModal"
+                  @click="openDeleteModal(driver)"
+                >
+                  Delete
+                </a>
               </li>
             </ul>
           </div>
@@ -111,6 +118,7 @@
       </tr>
     </tbody>
   </table>
+  <DeleteDriverModal @delete-confirmation="deleteDriver" />
 </template>
 
 <script setup>
@@ -119,6 +127,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import DriverModal from "./DriverModal.vue";
+import DeleteDriverModal from "./deleteDriverModal.vue";
 const users = ref([]);
 const modalMode = ref("add");
 const selectedUser = ref(null);
@@ -146,6 +155,14 @@ const openEditModal = (user) => {
   selectedUser.value = { ...user };
 };
 
+const openDeleteModal = (driver) => {
+  selectedUser.value = { ...driver };
+  modalMode.value = "delete";
+};
+const deleteDriver = () => {
+  console.log("delete", selectedUser.value);
+};
+
 const handleUserSubmit = (userData) => {
   if (modalMode.value === "add") {
     users.value.push(userData);
@@ -159,9 +176,6 @@ const handleUserSubmit = (userData) => {
   }
 };
 
-const deleteUser = (index) => {
-  users.value.splice(index, 1);
-};
 const searchQuery = ref("");
 const selectedFilter = ref("");
 const value = ref([]);

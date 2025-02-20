@@ -1,3 +1,6 @@
+<script setup>
+const emit = defineEmits(["delete-confirmation"]);
+</script>
 <template>
   <div
     class="modal fade"
@@ -5,6 +8,7 @@
     tabindex="-1"
     aria-labelledby="deleteModalLabel"
     aria-hidden="true"
+    data-bs-backdrop="false"
   >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -25,6 +29,14 @@
             data-bs-dismiss="modal"
           >
             Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+            @click="emit('delete-confirmation')"
+          >
+            Delete
           </button>
         </div>
       </div>
