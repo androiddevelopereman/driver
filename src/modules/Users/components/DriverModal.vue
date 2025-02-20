@@ -224,7 +224,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["submit"]);
-const userData = ref({ ...props.user });
+const userData = ref({});
 
 async function handleSubmit() {
   try {
@@ -269,7 +269,10 @@ async function handleSubmit() {
 
     const response = await axios({
       method: props.mode === "add" ? "post" : "put",
-      url: "http://192.168.100.22:8091/api/drivers",
+      url:
+        props.mode === "add"
+          ? "http://192.168.100.22:8091/api/drivers"
+          : `http://192.168.100.22:8091/api/drivers/${props.user.id}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -296,6 +299,19 @@ async function handleSubmit() {
 function resetForm() {
   userData.value = { ...props.user };
 }
+
+watch(
+  props,
+  (newVal, oldVal) => {
+    console.log("newVal", newVal);
+    console.log("oldVal", oldVal);
+    userData.value = { ...newVal.user };
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 </script>
 
 <style>
